@@ -52,13 +52,15 @@ export default {
         this.init()
     },
     watch: {
-        price(newVal){
-            this.amount = this.qty * newVal
+        price(newVal = 0){
+            // this.amount = (this.qty * newVal).toFixed(2)
+            console.log(newVal);
         },
-        qty(newVal){
-            this.amount = this.price * newVal
+        qty(newVal = 0){
+            // this.amount = (this.price * newVal).toFixed(2)
+            console.log(newVal);
         },
-        amount(newVal){
+        amount(newVal = 0){
             this.price = (newVal / this.qty).toFixed(2)
         },
     },
@@ -93,7 +95,7 @@ export default {
                 this.is_even.success = true
                 localStorage.setItem("isEven", JSON.stringify(this.is_even))
                 localStorage.setItem("dataStorage", JSON.stringify(dataStorage))
-                this.actionList(`Четное(${this.amount}), записываю в локалсторедж`)
+                this.actionList(`Четное(${this.amount}), записываю в локалсторедж (Операция №${this.nonce})`)
             }
             else {
                 this.is_even.success = false
@@ -104,10 +106,10 @@ export default {
         priceField(event) {
             this.debounceAction(event.target.value, 'price')
         },
-        qtyField() {
+        qtyField(event) {
             this.debounceAction(event.target.value, 'qty')
         },
-        amountField() {
+        amountField(event) {
             this.debounceAction(event.target.value, 'amount')
         },
         actionList(act) {
@@ -118,13 +120,15 @@ export default {
             this.debounce = setTimeout(() => {
                 switch (inp) {
                     case 'price':
-                        this.price = target
+                        this.price = target 
+                        this.amount = target * this.qty
                         break
                     case 'qty':
-                        this.qty = target
+                        this.qty = target 
+                        this.amount = target * this.price
                         break
                     case 'amount':
-                        this.amount = target
+                        this.amount = target 
                         break
                 }
                 this.actionList(`Изменение  поля: ${inp} на ${target || 0}`)
